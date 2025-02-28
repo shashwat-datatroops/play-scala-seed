@@ -1,0 +1,74 @@
+openapi: "3.0.0"
+info:
+  title: Connection-Manager
+  description: API to getting the connection detail using connection Id.
+  version: "0.0.1"
+servers:
+  - url: http://localhost:9001/api/1.0
+paths:
+  /connections/{connectionId}/overview:
+    get:
+      summary: Get Connection Overview
+      description: Retrieve details about a specific connection using its ID.
+      operationId: getConnection
+      parameters:
+        - name: connectionId
+          in: path
+          required: true
+          description: Unique ID of the connection.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully retrieved connection details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Connection'
+        '404':
+          description: Connection not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+components:
+  schemas:
+    Connection:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        system1:
+          $ref: '#/components/schemas/System'
+        system2:
+          $ref: '#/components/schemas/System'
+        status:
+          type: string
+          enum: [ACTIVE, DEACTIVATED]
+    System:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        url:
+          type: string
+          format: uri
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+    InternalServerError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Connection ID is not parsable to UUID"
