@@ -27,7 +27,7 @@ class SwaggerController @Inject() (val controllerComponents: ControllerComponent
   private val logger = Logger(this.getClass)
 
   def swaggerDoc: Action[AnyContent] = Action.async {
-    env.resourceAsStream("public/swagger.yaml") match {
+    env.resourceAsStream("/public/docs/swagger.yaml") match {
 
       case Some(file) =>
         logger.info("Swagger documentation file found, serving the file.")
